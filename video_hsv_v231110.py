@@ -310,7 +310,7 @@ def hsv_setting_read():
 # ******************** sg CUSTOMIZE FUNCTION *********************
 
 # 물체를 좌우 타겟 위치에 놓기 위해 로봇 동작을 단 한 번 조절하는 함수
-def obj_x_centering(obj_x_center, robot_flag):
+def obj_x_centering(obj_x_center):
 
     if obj_x_center < ((W_View_size)/2 * 0.95) :
         print("object_x_center = ", obj_x_center, "-> Need to turn left!")
@@ -322,13 +322,10 @@ def obj_x_centering(obj_x_center, robot_flag):
         #time.sleep(3)
     else :
         print("robot already satisfy the standard!")
-        robot_flag = 1 
-
-    return robot_flag
 
 
 #물체를 화면 y축 가운데 놓기 위해 로봇 헤드 각도를 한 번 조절하는 함수
-def obj_y_centering(obj_y_center, head_flag):
+def obj_y_centering(obj_y_center):
     # Head position control
     if obj_y_center > (H_View_size)/2 * 1.15 :
         print("object_y_center = ", obj_y_center, "-> Need to head down!")
@@ -341,9 +338,6 @@ def obj_y_centering(obj_y_center, head_flag):
         #time.sleep(3)
     else:
         print("Head already satisfy the standard!")
-        head_flag = 1 # Mean head degree satisfied
-
-    return head_flag
 
     
 # **************************************************
@@ -384,13 +378,11 @@ if __name__ == '__main__':
 
     #-------------------------------------
 
-    W_View_size = 800 #320  #320  #640
-    H_View_size = 500
+    W_View_size = 1536 #320  #320  #640
+    H_View_size = 864
     #H_View_size = int(W_View_size / 1.777)
     #H_View_size = 600  #int(W_View_size / 1.333)
     
-    BPS =  4800  # 4800,9600,14400, 19200,28800, 57600, 115200
-    serial_use = 1
     View_select = 0
     
     #-------------------------------------
@@ -488,20 +480,7 @@ if __name__ == '__main__':
     head_condition = 0
     robot_condition = 0
     
-    head_dir = 0
-    ball_theta = 0
-    ball_theta_index = -1
-    
-    shot_flag = 0 # Save the shot info
-    shot_turn_flag = 0
-    same_flag = 0
-    far_flag = 0
-    flag_detected = 0
 
-    ball_flag = 0 # Save the ball position
-    flag_flag = 0 # Save the initial flag position 
-
-    direction_flag = 0 # Determine robot walking direction
     
     new = 1
     ball = [-1, -1, -1, -1] #ball pixel location
@@ -569,8 +548,14 @@ if __name__ == '__main__':
                 detect_count += 1 
 
                 x0, y0, w0, h0 = cv2.boundingRect(c0)
+                x_center = x0 + w0/2
+                y_center = y0 + h0/2
                 
                 cv2.rectangle(frame, (x0, y0), (x0 + w0, y0 + h0), (0, 0, 255), 2)
+
+                obj_x_centering(ball_x_center)
+                obj_y_centering(ball_y_center)
+
                 
         # nothing detected        
         if len(cnts0) <= 0:
@@ -584,35 +569,7 @@ if __name__ == '__main__':
             Area1 = 0
             Angle = 0
             non_detect_count += 1
-
-
-
-                time.sleep(3)
-
-
-
-        if detect_count > 50 and not robot_condition:
-            detect_count = 0
-            ball_x_center = x0 + w0/2
-            ball_y_center = y0 + h0/2
-            robot_condition = obj_x_centering(ball_x_center, robot_condition)
-
-        # Ready to move in front but distance not calculated
-        # 조건 : 공 감지, 일렬 정렬, ball x center -> 결과 : y centering 후 거리 계산 후 shot 또는 직진 보행
-        elif detect_count > 50 and robot_condition and not head_condition:
-            detect_count = 0
-
-            ball_x_center = x0 + w0/2
-            ball_y_center = y0 + h0/2
-            head_condition = obj_y_centering(ball_y_center, head_condition)
-
-            
         
-        elif non_detect_count > 50:
-            detect_count = 0
-            non_detect_count = 0
-            print("nothing detected")
-            
 
         Frame_time = (clock() - old_time) * 1000.
 
