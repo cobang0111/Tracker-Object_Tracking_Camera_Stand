@@ -396,9 +396,7 @@ class inferThread(threading.Thread):
         threading.Thread.__init__(self)
         self.yolov7_wrapper = yolov7_wrapper
 
-        self.cap = cv2.VideoCapture(
-            "/opt/nvidia/deepstream/deepstream/samples/streams/sample_1080p_h264.mp4"
-        )
+        self.cap = cv2.VideoCapture(0)
 
         # Check if the video file was successfully loaded
         if not self.cap.isOpened():
@@ -470,8 +468,10 @@ if __name__ == "__main__":
     # engine_file_path = "../engines/yolov7-tiny-416.engine"
 
     # Version with input image of 640x640 pixels
-    PLUGIN_LIBRARY = "/home/sgme/tensorrtx/yolov7/build/libmyplugins.so"
-    engine_file_path = "/home/sgme/tensorrtx/yolov7/build/yolov7-tiny.engine"
+    #PLUGIN_LIBRARY = "/home/sgme/tensorrtx/yolov7/build/libmyplugins.so"
+    #engine_file_path = "/home/sgme/tensorrtx/yolov7/build/yolov7-tiny.engine"
+    PLUGIN_LIBRARY = "libmyplugins.so"
+    engine_file_path = "yolov7-tiny.engine"
 
     if len(sys.argv) > 1:
         engine_file_path = sys.argv[1]

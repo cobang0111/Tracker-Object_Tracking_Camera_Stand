@@ -15,7 +15,7 @@ import numpy as np
 import pycuda.autoinit
 import pycuda.driver as cuda
 import tensorrt as trt
-from deep_sort_realtime.deepsort_tracker import DeepSort
+#from deep_sort_realtime.deepsort_tracker import DeepSort
 
 import Jetson.GPIO as GPIO
 import time
@@ -64,17 +64,26 @@ def motor1_control(dx):
 '''
 
 def motor1_control(dx):
+
     global duty_cycle
-    duty_cycle -= 0.02 * (dx/100)
-    
-    if duty_cycle >= 11.9:
-        duty_cycle = 11.9
+    dt = 10
+    print("dx = {:.2f}".format(dx), "| dy = {:.2f}".format(dy))
 
-    elif duty_cycle < 1.9:
-        duty_cycle = 1.9
-    
-    servo1.ChangeDutyCycle(duty_cycle)
+    for i in range(dt):
+        if abs(dx) > 64:
+           duty_cycle -= 0.00005*dx
+           
+        
+        if duty_cycle >= 11.9:
+            duty_cycle = 11.9
 
+        elif duty_cycle < 1.9:
+            duty_cycle = 1.9
+
+        servo1.ChangeDutyCycle(duty_cycle)
+        time.sleep(1/100)
+
+    print("duty_cycle = {:.2f}".format(duty_cycle))
 
 def get_img_path_batches(batch_size, img_dir):
     ret = []
@@ -172,7 +181,7 @@ def gstreamer_pipeline(
             framerate_1,
             flip_method,
             display_width,
-            display_height,
+            display_height
         )
     )
 
@@ -527,12 +536,16 @@ class inferThread(threading.Thread):
         threading.Thread.__init__(self)
         self.yolov7_wrapper = yolov7_wrapper
 
-        print(gstreamer_pipeline(flip_method=0))
-        self.cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+        # Camera module V2
+        #print(gstreamer_pipeline(flip_method=0))
+        #self.cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+
+        # Webcam
+        self.cap = cv2.VideoCapture(0)
 
         # Check if the video file was successfully loaded
         if not self.cap.isOpened():
-            print("Error opening video file")
+            print("Error opening video")
 
     def run(self):
         global dx, dy, x, y, x_center, y_center, frame_count
@@ -627,8 +640,10 @@ if __name__ == "__main__":
     #servo2 = GPIO.PWM(servo2_pin, 50)
 
     # Version with input image of 640x640 pixels
-    PLUGIN_LIBRARY = "/home/sgme/tensorrtx/yolov7/build/libmyplugins.so"
-    engine_file_path = "/home/sgme/tensorrtx/yolov7/build/yolov7-tiny.engine"
+    #PLUGIN_LIBRARY = "/home/sgme/tensorrtx/yolov7/build/libmyplugins.so"
+    #engine_file_path = "/home/sgme/tensorrtx/yolov7/build/yolov7-tiny.engine"
+    PLUGIN_LIBRARY = "libmyplugins.so"
+    engine_file_path = "yolov7-tiny.engine"
 
     if len(sys.argv) > 1:
         engine_file_path = sys.argv[1]
