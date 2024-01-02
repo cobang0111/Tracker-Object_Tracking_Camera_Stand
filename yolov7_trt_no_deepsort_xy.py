@@ -88,7 +88,7 @@ def motor1_control(dx, dy):
 
         
 
-    for i in range(2):
+    for i in range(int(dt/5)):
         if abs(dy) > 48:
            duty_cycle_y += 0.00005*dy
 
