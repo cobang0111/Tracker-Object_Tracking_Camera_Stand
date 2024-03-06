@@ -1,2 +1,3 @@
-# Capstone_Design_2023_2
--
+# Tracker : The Embedded Camera Stand which Tracking Target Person using YOLO DeepSORT
+
+
