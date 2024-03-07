@@ -91,6 +91,19 @@ python3 yolov7_pt_sort_motor.py --weights yolov7-tiny.pt --no-trace --view-img -
 
 ![image](https://github.com/cobang0111/Tracker-Object_Tracking_Camera_Stand/assets/97373900/2d7773ac-d84b-4949-9ce6-39bb30f31062)
 
+
+<br>
+
+## ✨Reference
+All right and license follow the official yolov7 and below reference repository
+
+https://github.com/WongKinYiu/yolov7
+
+https://github.com/spehj/jetson-nano-yolov7-tensorrt
+
+https://github.com/haroonshakeel/yolov7-object-tracking
+
+
 <br>
 
 <br>
