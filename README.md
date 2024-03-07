@@ -15,7 +15,7 @@ Operation Video - Coming Soon
 
 <br>
 
-Jetson Nano 4GB, YOLOv7 에서 테스트 되었으며, 크게 다음과 같은 2가지 작동 모드를 제공합니다.
+Jetson Nano 4GB, CUDA 10.2, JetPack 4.6, Python 3.6, PyTorch v1.10.0 - torchvision v.0.11.1, YOLOv7 에서 테스트 되었으며, USB webcam (640x480) 실시간 처리를 기반으로 크게 다음과 같은 2가지 작동 모드를 제공합니다.
 
 <br>
 
@@ -37,10 +37,17 @@ Jetson Nano 4GB, YOLOv7 에서 테스트 되었으며, 크게 다음과 같은 2
 
 ## ✨Prerequisite
 
-```bash
-temp
-```
+Jetson Nano 에서 TRT 기반의 분석이 가능하도록 사전 환경 설정이 필요합니다.
 
+<br>
+
+Jetson Nano 의 사양을 최고 사양으로 설정하고, Swap memory 확장이 필요합니다.
+
+<br>
+
+opencv가 CUDA 를 사용하도록 cmake build를 수행해야 합니다.
+
+<br>
 <br>
 
 
@@ -57,15 +64,36 @@ cd Tracker-Object_Tracking_Camera_Stand
 <br>
 
 ## ✨Execution
-1st terminal (Activating x server + starting docker + Executing intel realsense node)
 
+Mode 1 - Fast Operation Mode (17fps) : 화면 내 가장 크게 감지된 사람을 추적
 ```bash
-temp
+
+python3 yolov7_trt_no_deepsort_xy.py
+
 ```
 
 <br>
 
 
+Mode 2 - Accurate Operation Mode (3fps) : DeepSORT 를 사용하여 ID 기반 추적
+```bash
+
+cd yolov7
+
+python3 yolov7_pt_sort_motor.py --weights yolov7-tiny.pt --no-trace --view-img --nosave --source 0 --show-fps --seed 2 --track --classes 0 --show-track
+
+```
+
+
+<br>
+
+## ✨Result
+
+![image](https://github.com/cobang0111/Tracker-Object_Tracking_Camera_Stand/assets/97373900/2d7773ac-d84b-4949-9ce6-39bb30f31062)
+
+<br>
+
+<br>
 
 
 
