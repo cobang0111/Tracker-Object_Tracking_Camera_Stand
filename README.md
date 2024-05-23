@@ -4,7 +4,10 @@
 이 repository는 YOLO DeepSORT 기반의 Target Person Tracking 기능을 제공하는 Embedded 카메라 스탠드의 소스 코드입니다.
 <br>
 <br>
-Operation Video - Coming Soon
+Operation Video
+<br>
+https://youtu.be/oVTTcawM6HI?si=1EZC0dn0Wkzd7s7u
+
 <br>
 
 <div style="text-align: center;">
@@ -31,7 +34,7 @@ Jetson Nano 4GB, CUDA 10.2, JetPack 4.6, Python 3.6, PyTorch v1.10.0 - torchvisi
 - Jetson Nano 4GB 의 Memory 부족 현상
 - TRT 기반의 DeepSORT 구현 필요
 - 2축 Servo Motor를 기반으로 한 스탠드를 사용하여, Position 제어가 불가능.
-  이로 인해 DeepSORT 과정에서 Kalman filter 와 Hungarian Algorithm 을 기반으로 추적을 할 때 프레임 간의 물체의 pixel 위치가 많이 달라져 추적 대상을 놓치는 경우가 빈번하게 발생합니다.
+  이로 인해 DeepSORT 과정에서 Kalman filter 와 Hungarian Algorithm 을 기반으로 추적을 할 때 프레임 간의 물체의 pixel 위치가 많이 달라져 추적 대상을 놓치는 경우가 발생합니다.
 
 <br>
 
